@@ -2,7 +2,22 @@ package com.comp3940.assignment.UploadServer;
 
 import java.io.*;
 import java.time.Clock;
+
+import com.comp3940.assignment.Utils.HtmlExtractor;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.*;
+import jakarta.servlet.annotation.*;
+import jakarta.servlet.http.HttpServlet;
+
+@WebServlet(name = "UploadServlet", value = "")
 public class UploadServlet extends HttpServlet {
+   private final HtmlExtractor extractor = new HtmlExtractor();
+   public void doGet(jakarta.servlet.http.HttpServletRequest request, jakarta.servlet.http.HttpServletResponse response) throws IOException, ServletException {
+      String html = this.extractor.getHtml(request, "Form.html");
+      PrintWriter out = response.getWriter();
+      out.println(html);
+   }
+
    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
       try {
          InputStream in = request.getInputStream();   

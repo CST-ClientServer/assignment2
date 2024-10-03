@@ -15,8 +15,8 @@ public class UploadServerThread extends Thread {
          HttpServletRequest req = new HttpServletRequest(in);  
          OutputStream baos = new ByteArrayOutputStream(); 
          HttpServletResponse res = new HttpServletResponse(baos); 
-         HttpServlet httpServlet = new UploadServlet();
-         httpServlet.doPost(req, res);
+//         HttpServlet httpServlet = new UploadServlet();
+//         httpServlet.doPost(req, res);
          OutputStream out = socket.getOutputStream(); 
          out.write(((ByteArrayOutputStream) baos).toByteArray());
          socket.close();
