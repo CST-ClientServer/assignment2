@@ -12,6 +12,7 @@ import com.comp3940.assignment.Exceptions.FileTooLargeException;
 import com.comp3940.assignment.Utils.ConnectionManager;
 import com.comp3940.assignment.Utils.FileSystemHandler;
 import com.comp3940.assignment.Utils.HtmlExtractor;
+import com.comp3940.assignment.Utils.JavaReflectTest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
@@ -28,6 +29,7 @@ public class UploadServlet extends HttpServlet {
    private FormDao formDao;
    public void init() {
       formDao = new FormDao();
+      JavaReflectTest.log("com.comp3940.assignment.UploadServer.UploadServlet");
    }
    protected void doGet(jakarta.servlet.http.HttpServletRequest request, jakarta.servlet.http.HttpServletResponse response) throws IOException, ServletException {
       String html = this.extractor.getHtml(request, "Form");
