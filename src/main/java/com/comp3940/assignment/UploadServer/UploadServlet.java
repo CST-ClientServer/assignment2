@@ -12,12 +12,15 @@ import jakarta.servlet.http.HttpServlet;
 @WebServlet(name = "UploadServlet", value = "")
 public class UploadServlet extends HttpServlet {
    private final HtmlExtractor extractor = new HtmlExtractor();
-   public void doGet(jakarta.servlet.http.HttpServletRequest request, jakarta.servlet.http.HttpServletResponse response) throws IOException, ServletException {
+   protected void doGet(jakarta.servlet.http.HttpServletRequest request, jakarta.servlet.http.HttpServletResponse response) throws IOException, ServletException {
       String html = this.extractor.getHtml(request, "Form.html");
       PrintWriter out = response.getWriter();
       out.println(html);
    }
-
+   protected void doPost(jakarta.servlet.http.HttpServletRequest request, jakarta.servlet.http.HttpServletResponse response) throws IOException, ServletException {
+      BufferedReader formData = request.getReader();
+      System.out.println(formData);
+   }
    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
       try {
          InputStream in = request.getInputStream();   
