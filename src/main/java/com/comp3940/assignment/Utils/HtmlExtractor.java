@@ -8,8 +8,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class HtmlExtractor {
-    public String getHtml(HttpServletRequest request, String htmlPage) throws IOException {
-        String filepath = request.getServletContext().getRealPath("/pages/" + htmlPage);
+    public String getHtml(HttpServletRequest request, String pageName) throws IOException {
+        String filepath = request.getServletContext().getRealPath("/pages/" + pageName + ".html");
         return new String(Files.readAllBytes(Paths.get(filepath)));
     }
 }
