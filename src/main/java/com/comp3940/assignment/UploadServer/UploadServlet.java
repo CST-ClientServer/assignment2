@@ -7,9 +7,9 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.lang.reflect.*;
 
-import com.comp3940.assignment.Dao.FormDao;
+//import com.comp3940.assignment.Dao.FormDao;
 import com.comp3940.assignment.Exceptions.FileTooLargeException;
-import com.comp3940.assignment.Utils.ConnectionManager;
+//import com.comp3940.assignment.Utils.ConnectionManager;
 import com.comp3940.assignment.Utils.FileSystemHandler;
 import com.comp3940.assignment.Utils.HtmlExtractor;
 import com.comp3940.assignment.Utils.JavaReflectTest;
@@ -19,6 +19,8 @@ import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 
 @WebServlet(name = "UploadServlet", value = "")
 @MultipartConfig
@@ -26,20 +28,38 @@ public class UploadServlet extends HttpServlet {
    private static final long MAX_FILE_SIZE = 16 * 1024 * 1024;
    private final HtmlExtractor extractor = new HtmlExtractor();
    private ObjectMapper mapper = new ObjectMapper();
-   private FormDao formDao;
+//   private FormDao formDao;
    public void init() {
-      formDao = new FormDao();
+//      formDao = new FormDao();
       JavaReflectTest.log("com.comp3940.assignment.UploadServer.UploadServlet");
    }
    protected void doGet(jakarta.servlet.http.HttpServletRequest request, jakarta.servlet.http.HttpServletResponse response) throws IOException, ServletException {
+      System.out.println("do get");
       String html = this.extractor.getHtml(request, "Form");
+
       PrintWriter out = response.getWriter();
       out.println(html);
    }
+
+   protected void doOptions(jakarta.servlet.http.HttpServletRequest request, jakarta.servlet.http.HttpServletResponse response) throws ServletException, IOException {
+      System.out.println("??????? do option called??????\n");
+      response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+      response.setHeader("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,PATCH,OPTIONS");
+      response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With");
+      response.setStatus(HttpServletResponse.SC_OK);
+   }
+
    protected void doPost(jakarta.servlet.http.HttpServletRequest request, jakarta.servlet.http.HttpServletResponse response) throws IOException, ServletException {
+      System.out.println("do post called");
       try {
-         String caption = request.getParameter("caption");
-         String date = request.getParameter("date");
+         response.setHeader("Access-Control-Allow-Origin", "*");
+         response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
+         response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+         response.setStatus(HttpServletResponse.SC_OK);
+         System.out.println("??????? in do Post??????\n");
+
+         String caption = request.getParameter("caption") != null ? request.getParameter("caption") : "";
+         String date = request.getParameter("date") != null ? request.getParameter("date") : "";
          Part file = request.getPart("file");
 
          if (file.getSize() >= MAX_FILE_SIZE) throw new FileTooLargeException("File is greater than " + MAX_FILE_SIZE);
