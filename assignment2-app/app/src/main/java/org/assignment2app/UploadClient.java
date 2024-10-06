@@ -2,28 +2,57 @@ package org.assignment2app;
 
 import java.io.*;
 import java.net.*;
+
 public class UploadClient {
-    public UploadClient() { }
-    public String uploadFile() {
+    private static final int PORT = 8081;
+    private final HttpBuilder builder;
+
+    public UploadClient() {
+        builder = new HttpBuilder();
+    }
+
+    public String uploadFile(String filepath) {
         String listing = "";
         try {
-            Socket socket = new Socket("localhost", 8999);
-            BufferedReader in = new BufferedReader(
+            // connect socket
+            System.out.println("Connecting socket to localhost...");
+            Socket socket = new Socket("localhost", PORT);
+            System.out.println("Connection established\n");
+
+            // extract file bytes
+            System.out.println("Reading file bytes..");
+            FileInputStream fileInputStream = new FileInputStream(filepath);
+            byte[] fileBytes = fileInputStream.readAllBytes();
+            fileInputStream.close();
+            System.out.println("File reading complete\n");
+
+            // build http request
+            System.out.println("Building Http Request");
+            // build http request here
+            System.out.println("Http Request Successfully Built");
+
+            // prepare input stream for server response
+            System.out.println("Preparing socket for server response...");
+            BufferedReader socketIn = new BufferedReader(
                 new InputStreamReader(socket.getInputStream()));
-            OutputStream out = socket.getOutputStream();
-            FileInputStream fis = new FileInputStream("AndroidLogo.png");
-            byte[] bytes = fis.readAllBytes();
-            out.write(bytes);
-            socket.shutdownOutput();
-            fis.close();
-            System.out.println("Came this far\n");
+            System.out.println("Socket successfully prepared for response\n");
+
+            // send post request
+            System.out.println("Sending upload request to server");
+            // post stuff here
+            System.out.println("File successfully uploaded\n");
+
+            // get response data
             String filename = "";
-            while ((filename = in.readLine()) != null) {
+            while ((filename = socketIn.readLine()) != null) {
                 listing += filename;
             }
-            socket.shutdownInput();
+
+            // close socket
+            socket.close();
         } catch (Exception e) {
-            System.err.println(e);
+            // print error message
+            System.err.println("Process Aborted: " + e.getMessage());
         }
         return listing;
     }
