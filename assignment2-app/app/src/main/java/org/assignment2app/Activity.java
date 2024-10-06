@@ -11,7 +11,7 @@ public class Activity {
    public Activity() {
    }
    public void onCreate() {
-      AsyncTask UploadAsyncTask = new UploadAsyncTask(imagesDirectoryPath + imageFilename).execute();
+      AsyncTask UploadAsyncTask = new UploadAsyncTask(imagesDirectoryPath + imageFilename, imageFilename).execute();
       System.out.println("Waiting for Callback");
       try { 
          BufferedReader br = new BufferedReader(new InputStreamReader(System.in));

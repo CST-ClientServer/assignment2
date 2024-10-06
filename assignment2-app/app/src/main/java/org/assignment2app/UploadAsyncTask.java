@@ -2,8 +2,10 @@ package org.assignment2app;
 
 public class UploadAsyncTask extends AsyncTask {
    private final String filepath;
-   public UploadAsyncTask(String filename) {
-      this.filepath = filename;
+   private final String filename;
+   public UploadAsyncTask(String filepath, String filename) {
+      this.filepath = filepath;
+      this.filename = filename;
    }
 
    protected void onPostExecute(String result) {
@@ -11,6 +13,6 @@ public class UploadAsyncTask extends AsyncTask {
    }
 
    protected String doInBackground() {
-     return new UploadClient().uploadFile(filepath);
+     return new UploadClient().uploadFile(filepath, filename);
    }
 }
