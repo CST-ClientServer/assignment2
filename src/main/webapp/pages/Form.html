@@ -3,6 +3,16 @@
 <body>
 <script src="https://cdn.tailwindcss.com"></script>
 
+<h2>HTML Forms</h2>
+<form action="http://localhost:8082/assignment_war/" method="post" enctype="multipart/form-data">
+    <label for="caption">Caption:</label><br>
+    <input type="text" name="caption" id="caption"><br><br>
+    <label for="date">Date: </label>
+    <input type="date" name="date" id="date"><br><br>
+    <input type="file" name="File" id="File" accept="image/*,.txt"><br><br>
+    <input type="submit" value="Submit">
+</form> 
+
 <h2 class="text-2xl font-bold mb-6 text-center">HTML Forms</h2>
 
 <form action="http://localhost:8082/assignment_war/" method="post" enctype="multipart/form-data" class="max-w-lg mx-auto bg-gray-100 p-8 rounded-lg shadow-lg">
