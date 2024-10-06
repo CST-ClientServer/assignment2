@@ -81,9 +81,7 @@ class App extends Component {
     render() {
         return (
             <div>
-                <h1>File Upload App</h1>
-                <h3>Upload a file along with caption and date</h3>
-
+                <h1>File Upload React App</h1>
                 <div>
                     <input type="file" onChange={this.onFileChange} />
                     <br />
@@ -104,7 +102,6 @@ class App extends Component {
                     <br />
                     <button onClick={this.onFileUpload}>Upload!</button>
                 </div>
-
                 {this.fileData()}
             </div>
         );
