@@ -1,11 +1,7 @@
-package com.comp3940.assignment.UploadServer;
+package com.comp3940.assignment.Servlets;
 
 import java.io.*;
-import java.time.Clock;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.lang.reflect.*;
 
 //import com.comp3940.assignment.Dao.FormDao;
 import com.comp3940.assignment.Exceptions.FileTooLargeException;
@@ -17,9 +13,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 
 @WebServlet(name = "UploadServlet", value = "")
@@ -33,7 +26,7 @@ public class UploadServlet extends HttpServlet {
 //      formDao = new FormDao();
       JavaReflectTest.log("com.comp3940.assignment.UploadServer.UploadServlet");
    }
-   protected void doGet(jakarta.servlet.http.HttpServletRequest request, jakarta.servlet.http.HttpServletResponse response) throws IOException, ServletException {
+   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
       System.out.println("do get");
       String html = this.extractor.getHtml(request, "Form");
 
@@ -41,7 +34,7 @@ public class UploadServlet extends HttpServlet {
       out.println(html);
    }
 
-   protected void doOptions(jakarta.servlet.http.HttpServletRequest request, jakarta.servlet.http.HttpServletResponse response) throws ServletException, IOException {
+   protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
       System.out.println("??????? do option called??????\n");
       response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
       response.setHeader("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,PATCH,OPTIONS");
@@ -49,7 +42,7 @@ public class UploadServlet extends HttpServlet {
       response.setStatus(HttpServletResponse.SC_OK);
    }
 
-   protected void doPost(jakarta.servlet.http.HttpServletRequest request, jakarta.servlet.http.HttpServletResponse response) throws IOException, ServletException {
+   protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
       System.out.println("do post called");
       try {
          response.setHeader("Access-Control-Allow-Origin", "*");
@@ -72,7 +65,7 @@ public class UploadServlet extends HttpServlet {
       }
    }
 
-   private void sendListing(HttpServletRequest request, jakarta.servlet.http.HttpServletResponse response) throws IOException {
+   private void sendListing(HttpServletRequest request, HttpServletResponse response) throws IOException {
       File dir = new File(request.getServletContext().getRealPath("/uploads"));
       String[] dirFiles = dir.list();
       Arrays.sort(dirFiles);

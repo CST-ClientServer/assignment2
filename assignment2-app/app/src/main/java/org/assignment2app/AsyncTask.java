@@ -1,4 +1,4 @@
-package com.comp3940.assignment.ConsoleApp;
+package org.assignment2app;
 
 public abstract class AsyncTask {
    AsyncTask execute() { 
