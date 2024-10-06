@@ -2,17 +2,25 @@ package org.assignment2app;
 
 import java.io.*;
 import java.net.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UploadClient {
-    public static final int PORT = 8081;
+    private static final HashMap<Integer, String> settings = new HashMap<>() {{
+        put(8081, "/upload/upload"); put(8082, "/assignment_war/");
+    }};
+    static {
+        settings.put(8081, "/upload/upload");
+        settings.put(8082, "/assignment_war/");
+    }
     private static final String caption = "Send Help";
     private static final String date = "2024-04-25";
-    private static final String endpoint = "/upload/upload";
     private static final String host = "localhost";
     private final HttpRequestBuilder builder;
+    public static final int PORT = 8082;
 
     public UploadClient() {
-        builder = new HttpRequestBuilder(host, endpoint);
+        builder = new HttpRequestBuilder(host, settings.get(PORT));
     }
 
     public String uploadFile(String filepath, String filename) {
