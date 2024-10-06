@@ -2,13 +2,12 @@ package org.assignment2app;
 
 import java.io.*;
 import java.net.*;
-import java.nio.charset.StandardCharsets;
 
 public class UploadClient {
     public static final int PORT = 8081;
     private static final String caption = "Send Help";
     private static final String date = "2024-04-25";
-    private static final String endpoint = "/upload/";
+    private static final String endpoint = "/upload/upload";
     private static final String host = "localhost";
     private final HttpRequestBuilder builder;
 
@@ -31,26 +30,23 @@ public class UploadClient {
             fileInputStream.close();
             System.out.println("File reading complete\n");
 
-            // build http request
-            System.out.println("Building Http Request");
-            builder.setSocketOut(socket.getOutputStream());
-            builder.addTextParameter("caption", caption);
-            builder.addTextParameter("date", date);
-//            builder.addFileParameter(filename, fileBytes);
-            System.out.println("Http Request Successfully Built\n");
-
             // prepare input stream for server response
             System.out.println("Preparing socket for server response...");
             BufferedReader socketIn = new BufferedReader(
                 new InputStreamReader(socket.getInputStream()));
             System.out.println("Socket successfully prepared for response\n");
 
+            // build http request
+            System.out.println("Building Http Request");
+            builder.setSocketOut(socket.getOutputStream());
+            builder.addTextParameter("caption", caption);
+            builder.addTextParameter("date", date);
+            builder.addFileParameter(filename, fileBytes);
+            System.out.println("Http Request Successfully Built\n");
+
             // send post request
             System.out.println("Sending upload request to server");
-            OutputStream socketOut = socket.getOutputStream();
             builder.sendRequest();
-//            socketOut.write(builder.getHttpRequest().getBytes(StandardCharsets.UTF_8));
-            socketOut.flush();
             System.out.println("File successfully uploaded\n");
 
             // get response data
