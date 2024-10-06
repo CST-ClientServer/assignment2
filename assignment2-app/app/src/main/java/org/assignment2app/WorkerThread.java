@@ -1,4 +1,4 @@
-package com.comp3940.assignment.ConsoleApp;
+package org.assignment2app;
 
 public class WorkerThread extends Thread {
    private AsyncTask aTask = null;
