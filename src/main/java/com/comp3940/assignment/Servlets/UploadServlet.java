@@ -53,7 +53,7 @@ public class UploadServlet extends HttpServlet {
 
          String caption = request.getParameter("caption") != null ? request.getParameter("caption") : "";
          String date = request.getParameter("date") != null ? request.getParameter("date") : "";
-         Part file = request.getPart("file");
+         Part file = request.getPart("File");
 
          if (file.getSize() >= MAX_FILE_SIZE) throw new FileTooLargeException("File is greater than " + MAX_FILE_SIZE);
 //         formDao.insertFormData(caption, date, file);
