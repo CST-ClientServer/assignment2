@@ -32,10 +32,14 @@ exploded`. Accept all changes.
 
 13. Enter to the assignment2-client folder
 
-14. Run npm install
-    `npm i`
+14. Run npm install `npm i` while in the assignment2-client terminal to install dependencies.
 
-15. Run the Tomcat Server (Ignore the initial placeholder form)
+15. Run the Tomcat Server that you recently set up for this project.
 
-16. Run the project in dev
-    `npm start`
+16. Run the React app by typing `npm start` while in the assignment2-client terminal
+
+17. For the ConsoleApp interaction, make assignment2-app/app/main/java a `src` folder and run Activity.java by pressing 
+the play button beside the main function. You may switch ports in the UploadClient.java file by altering the static port
+number(8081 or 8082).
+
+18. Make sure you run your own Tomcat server at port 8081 because this project sets up Tomcat at port 8082.
