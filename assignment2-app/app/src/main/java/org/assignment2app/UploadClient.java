@@ -3,12 +3,9 @@ package org.assignment2app;
 import java.io.*;
 import java.net.*;
 import java.util.HashMap;
-import java.util.Map;
 
 public class UploadClient {
-    private static final HashMap<Integer, String> settings = new HashMap<>() {{
-        put(8081, "/upload/upload"); put(8082, "/assignment_war/");
-    }};
+    private static final HashMap<Integer, String> settings = new HashMap<>();
     static {
         settings.put(8081, "/upload/upload");
         settings.put(8082, "/assignment_war/");
@@ -24,7 +21,7 @@ public class UploadClient {
     }
 
     public String uploadFile(String filepath, String filename) {
-        String listing = "";
+        String returnString = "";
         try {
             // connect socket
             System.out.println("Connecting socket to localhost...");
@@ -41,7 +38,8 @@ public class UploadClient {
             // prepare input stream for server response
             System.out.println("Preparing socket for server response...");
             BufferedReader socketIn = new BufferedReader(
-                new InputStreamReader(socket.getInputStream()));
+                    new InputStreamReader(socket.getInputStream()));
+            HttpResponseReader reader = new HttpResponseReader(socketIn);
             System.out.println("Socket successfully prepared for response\n");
 
             // build http request
@@ -55,13 +53,21 @@ public class UploadClient {
             // send post request
             System.out.println("Sending upload request to server");
             builder.sendRequest();
-            System.out.println("File successfully uploaded\n");
+            System.out.println("Request successfully sent\n");
 
             // get response data
-            String responseFileNames = "";
-            while ((responseFileNames = socketIn.readLine()) != null) {
-                listing += responseFileNames;
+            System.out.println("Waiting for server response...");
+            if (reader.getStatusCode() != 200) {
+                throw new Exception();
             }
+            System.out.println("Server returned 200 status\n");
+
+            // create listing string
+            StringBuilder stringBuilder = new StringBuilder().append("Current files in server\n").append("\n");
+            for (String listing : reader.getListing()) {
+                stringBuilder.append(listing).append("\n");
+            }
+            returnString = stringBuilder.toString();
 
             // close socket
             socket.close();
@@ -70,6 +76,6 @@ public class UploadClient {
             // print error message
             System.err.println("Process Aborted: " + e.getMessage());
         }
-        return listing;
+        return returnString;
     }
 }
