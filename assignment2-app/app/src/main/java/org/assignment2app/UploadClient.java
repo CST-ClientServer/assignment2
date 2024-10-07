@@ -58,7 +58,7 @@ public class UploadClient {
             // get response data
             System.out.println("Waiting for server response...");
             if (reader.getStatusCode() != 200) {
-                throw new Exception();
+                throw new WrongStatusException("Server returned a status code other than 200: " + reader.getStatusCode());
             }
             System.out.println("Server returned 200 status\n");
 
@@ -72,6 +72,8 @@ public class UploadClient {
             // close socket
             socket.close();
 
+        } catch (WrongStatusException e) {
+            System.err.println("Wrong Status Exception: " + e.getMessage());
         } catch (Exception e) {
             // print error message
             System.err.println("Process Aborted: " + e.getMessage());
