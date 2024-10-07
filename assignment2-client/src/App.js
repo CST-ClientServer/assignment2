@@ -1,138 +1,138 @@
 // Filename - App.js
 
 import axios from "axios";
-import React, { Component } from "react";
+import React, { useState } from "react";
 
-class App extends Component {
-    state = {
-        // Initially, no file is selected
-        selectedFile: null,
-        caption: "",
-        date: "",
-        isLoading: false,
-        uploadProgress: 0,
-    };
+const App = () => {
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [caption, setCaption] = useState("");
+    const [date, setDate] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+    const [uploadProgress, setUploadProgress] = useState(0);
 
     // On file select (from the pop up)
-    onFileChange = (event) => {
-        // Update the state
-        this.setState({
-            selectedFile: event.target.files[0]
-        });
+    const onFileChange = (event) => {
+        setSelectedFile(event.target.files[0]);
     };
 
     // On input change for caption and date
-    onInputChange = (event) => {
-        this.setState({
-            [event.target.name]: event.target.value
-        });
+    const onInputChange = (event) => {
+        const { name, value } = event.target;
+        if (name === "caption") setCaption(value);
+        if (name === "date") setDate(value);
     };
 
     // On file upload (click the upload button)
-    onFileUpload = () => {
-        this.setState({ isLoading: true, uploadProgress: 0 });
+    const onFileUpload = async () => {
+        if (!selectedFile) {
+            alert("Please select a file to upload.");
+            return;
+        }
+
+        setIsLoading(true);
+        setUploadProgress(0);
+
         // Create an object of formData
         const formData = new FormData();
+        formData.append("File", selectedFile);
+        formData.append("caption", caption);
+        formData.append("date", date);
 
-        // Update the formData object
-        formData.append("File", this.state.selectedFile);
-        formData.append("caption", this.state.caption);
-        formData.append("date", this.state.date);
-
-        // Details of the uploaded file
-        console.log(this.state.selectedFile);
-
-        // Request made to the backend api
-        // Send formData object to the correct servlet URL
-        axios.post("http://localhost:8082/assignment_war/", formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            },
-            onUploadProgress: ({ loaded, total }) => {
-                this.setState({ uploadProgress: Math.round((loaded * 100) / total) });
-            }
-        })
-            .then(response => {
-                this.setState({ isLoading: false });
-                console.log("File uploaded successfully");
-                console.log(response.data);
-            })
-            .catch(error => {
-                this.setState({ isLoading: false });
-                console.error("There was an error uploading the file!", error);
-            });
+        try {
+            const response = await axios.post(
+                "http://localhost:8082/assignment_war/",
+                formData,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                    onUploadProgress: ({ loaded, total }) => {
+                        setUploadProgress(Math.round((loaded * 100) / total));
+                    },
+                },
+            );
+            console.log("File uploaded successfully:", response.data);
+        } catch (error) {
+            console.error("There was an error uploading the file!", error);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
-    // File content to be displayed after
-    // file upload is complete
-    fileData = () => {
-        if (this.state.selectedFile) {
-            const lastModifiedDate = new Date(this.state.selectedFile.lastModified).toDateString();
+    // File content to be displayed after file upload is complete
+    const fileData = () => {
+        if (selectedFile) {
+            const lastModifiedDate = new Date(
+                selectedFile.lastModified,
+            ).toDateString();
             return (
                 <div style={{ textAlign: "center", marginTop: "20px" }}>
                     <h2>File Details:</h2>
-                    <p><strong>File Name:</strong> {this.state.selectedFile.name}</p>
-                    <p><strong>File Type:</strong> {this.state.selectedFile.type}</p>
-                    <p><strong>Last Modified:</strong> {lastModifiedDate}</p>
+                    <p>
+                        <strong>File Name:</strong> {selectedFile.name}
+                    </p>
+                    <p>
+                        <strong>File Type:</strong> {selectedFile.type}
+                    </p>
+                    <p>
+                        <strong>Last Modified:</strong> {lastModifiedDate}
+                    </p>
                 </div>
             );
         } else {
             return (
-                <div style={{textAlign: "center"}}>
-                    <br/>
+                <div style={{ textAlign: "center" }}>
+                    <br />
                     <h4>Choose a file before pressing the Upload button</h4>
                 </div>
             );
         }
     };
 
-    render() {
-        return (
-            <div style={{textAlign: "center", marginTop: "50px"}}>
-                <h1>File Upload Using&nbsp;
-                    <img
-                        src="/logo192.png"
-                        alt="Logo"
-                        style={{width: "20px", height: "20px"}}
-                    />
-                    React</h1>
-                <div>
-                    <input
-                        type="file"
-                        onChange={this.onFileChange}
-                        style={{marginBottom: "20px", marginLeft: "3%"}}
-                    />
-                    <br/>
-                    <input
-                        type="text"
-                        name="caption"
-                        placeholder="Caption"
-                        value={this.state.caption}
-                        onChange={this.onInputChange}
-                        style={{marginBottom: "20px"}}
-                    />
-                    <br/>
-                    <input
-                        type="date"
-                        name="date"
-                        value={this.state.date}
-                        onChange={this.onInputChange}
-                        style={{marginBottom: "20px"}}
-                    />
-                    <br/>
-                    <button
-                        onClick={this.onFileUpload}
-                        disabled={this.state.isLoading}
-                    >
-                        {this.state.isLoading ? 'Uploading...' : 'Upload!'}
-                    </button>
-                    <br/>
-                    {this.state.isLoading && <progress value={this.state.uploadProgress} max="100"/>}
-                </div>
-                {this.fileData()}
+    return (
+        <div style={{ textAlign: "center", marginTop: "50px" }}>
+            <h1>
+                File Upload Using&nbsp;
+                <img
+                    src="/logo192.png"
+                    alt="Logo"
+                    style={{ width: "20px", height: "20px" }}
+                />
+                React
+            </h1>
+            <div>
+                <input
+                    type="file"
+                    onChange={onFileChange}
+                    style={{ marginBottom: "20px", marginLeft: "3%" }}
+                />
+                <br />
+                <input
+                    type="text"
+                    name="caption"
+                    placeholder="Caption"
+                    value={caption}
+                    onChange={onInputChange}
+                    style={{ marginBottom: "20px" }}
+                />
+                <br />
+                <input
+                    type="date"
+                    name="date"
+                    value={date}
+                    onChange={onInputChange}
+                    style={{ marginBottom: "20px" }}
+                />
+                <br />
+                <button onClick={onFileUpload} disabled={isLoading}>
+                    {isLoading ? "Uploading..." : "Upload!"}
+                </button>
+                <br />
+                {isLoading && <progress value={uploadProgress} max="100" />}
             </div>
-        );
-    }
-}
+            {fileData()}
+        </div>
+    );
+};
 
 export default App;
