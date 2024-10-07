@@ -1,19 +1,36 @@
 package org.assignment2app;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class HttpResponseReader {
     private final BufferedReader socketIn;
-    private int statusCode;
     public HttpResponseReader(BufferedReader socketIn) {
         this.socketIn = socketIn;
     }
 
     public int getStatusCode() throws IOException {
-        return 69;
+        String headerStatus = socketIn.readLine();
+        String stringStatusCode = headerStatus.split(" ")[1];
+        return Integer.parseInt(stringStatusCode);
     }
 
-    public String[] getListing() {
-        return new String[]{"filler"};
+    public ArrayList<String> getListing() throws IOException {
+        ArrayList<String> listings = new ArrayList<>();
+        String buffer;
+        while((buffer = socketIn.readLine()) != null) {
+            addFilenameToListing(buffer, listings);
+        }
+        return listings;
+    }
+
+    private void addFilenameToListing(String buffer, ArrayList<String> listings) {
+        Pattern regexPattern = Pattern.compile("<[^>]*>([^<]*\\b\\w+\\.[^<]+)<\\/[^>]*>");
+        Matcher matcher = regexPattern.matcher(buffer);
+        if (matcher.find()) {
+            listings.add(matcher.group(1));
+        }
     }
 }
