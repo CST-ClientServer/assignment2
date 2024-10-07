@@ -86,7 +86,7 @@ public class UploadServlet extends HttpServlet {
    private String addDirectoryToHtml(String html, String[] directoryList) {
       StringBuilder htmlDirFiles = new StringBuilder();
       for (String file : directoryList) {
-         htmlDirFiles.append("<h2>").append(file).append("</h2><br>\n");
+         htmlDirFiles.append("<h2 class=\"text-lg font-semibold\">").append(file).append("</h2><br>\n");
       }
       return html.replace("directoryHere", htmlDirFiles);
    }
