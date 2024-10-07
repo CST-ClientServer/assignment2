@@ -8,7 +8,9 @@ class App extends Component {
         // Initially, no file is selected
         selectedFile: null,
         caption: "",
-        date: ""
+        date: "",
+        isLoading: false,
+        uploadProgress: 0,
     };
 
     // On file select (from the pop up)
@@ -28,11 +30,12 @@ class App extends Component {
 
     // On file upload (click the upload button)
     onFileUpload = () => {
+        this.setState({ isLoading: true, uploadProgress: 0 });
         // Create an object of formData
         const formData = new FormData();
 
         // Update the formData object
-        formData.append("file", this.state.selectedFile);
+        formData.append("File", this.state.selectedFile);
         formData.append("caption", this.state.caption);
         formData.append("date", this.state.date);
 
@@ -44,13 +47,18 @@ class App extends Component {
         axios.post("http://localhost:8082/assignment_war/", formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
+            },
+            onUploadProgress: ({ loaded, total }) => {
+                this.setState({ uploadProgress: Math.round((loaded * 100) / total) });
             }
         })
             .then(response => {
+                this.setState({ isLoading: false });
                 console.log("File uploaded successfully");
                 console.log(response.data);
             })
             .catch(error => {
+                this.setState({ isLoading: false });
                 console.error("There was an error uploading the file!", error);
             });
     };
@@ -61,18 +69,18 @@ class App extends Component {
         if (this.state.selectedFile) {
             const lastModifiedDate = new Date(this.state.selectedFile.lastModified).toDateString();
             return (
-                <div>
+                <div style={{ textAlign: "center", marginTop: "20px" }}>
                     <h2>File Details:</h2>
-                    <p>File Name: {this.state.selectedFile.name}</p>
-                    <p>File Type: {this.state.selectedFile.type}</p>
-                    <p>Last Modified: {lastModifiedDate}</p>
+                    <p><strong>File Name:</strong> {this.state.selectedFile.name}</p>
+                    <p><strong>File Type:</strong> {this.state.selectedFile.type}</p>
+                    <p><strong>Last Modified:</strong> {lastModifiedDate}</p>
                 </div>
             );
         } else {
             return (
-                <div>
-                    <br />
-                    <h4>Choose before Pressing the Upload button</h4>
+                <div style={{textAlign: "center"}}>
+                    <br/>
+                    <h4>Choose a file before pressing the Upload button</h4>
                 </div>
             );
         }
@@ -80,27 +88,46 @@ class App extends Component {
 
     render() {
         return (
-            <div>
-                <h1>File Upload React App</h1>
+            <div style={{textAlign: "center", marginTop: "50px"}}>
+                <h1>File Upload Using&nbsp;
+                    <img
+                        src="/logo192.png"
+                        alt="Logo"
+                        style={{width: "20px", height: "20px"}}
+                    />
+                    React</h1>
                 <div>
-                    <input type="file" onChange={this.onFileChange} />
-                    <br />
+                    <input
+                        type="file"
+                        onChange={this.onFileChange}
+                        style={{marginBottom: "20px", marginLeft: "3%"}}
+                    />
+                    <br/>
                     <input
                         type="text"
                         name="caption"
                         placeholder="Caption"
                         value={this.state.caption}
                         onChange={this.onInputChange}
+                        style={{marginBottom: "20px"}}
                     />
-                    <br />
+                    <br/>
                     <input
                         type="date"
                         name="date"
                         value={this.state.date}
                         onChange={this.onInputChange}
+                        style={{marginBottom: "20px"}}
                     />
-                    <br />
-                    <button onClick={this.onFileUpload}>Upload!</button>
+                    <br/>
+                    <button
+                        onClick={this.onFileUpload}
+                        disabled={this.state.isLoading}
+                    >
+                        {this.state.isLoading ? 'Uploading...' : 'Upload!'}
+                    </button>
+                    <br/>
+                    {this.state.isLoading && <progress value={this.state.uploadProgress} max="100"/>}
                 </div>
                 {this.fileData()}
             </div>
