@@ -63,7 +63,7 @@ public class UploadClient {
             System.out.println("Server returned 200 status\n");
 
             // create listing string
-            StringBuilder stringBuilder = new StringBuilder().append("Current files in server\n").append("---------------");
+            StringBuilder stringBuilder = new StringBuilder().append("Current files in server\n").append("\n");
             for (String listing : reader.getListing()) {
                 stringBuilder.append(listing).append("\n");
             }
