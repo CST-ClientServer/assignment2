@@ -18,10 +18,11 @@ public class UploadServlet extends HttpServlet {
    private static final long MAX_FILE_SIZE = 16 * 1024 * 1024;
    private final HtmlExtractor extractor = new HtmlExtractor();
    public void init() {
-      JavaReflectTest.log("com.comp3940.assignment.UploadServer.UploadServlet");
+      JavaReflectTest.log("com.comp3940.assignment.Servlets.UploadServlet");
    }
    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-      System.out.println("do get");
+      JavaReflectTest.logMethod("com.comp3940.assignment.Servlets.UploadServlet", "doGet");
+//      System.out.println("do get");
       String html = this.extractor.getHtml(request, "Form");
 
       PrintWriter out = response.getWriter();
@@ -29,7 +30,8 @@ public class UploadServlet extends HttpServlet {
    }
 
    protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-      System.out.println("??????? do option called??????\n");
+      JavaReflectTest.logMethod("com.comp3940.assignment.Servlets.UploadServlet", "doOption");
+//      System.out.println("??????? do option called??????\n");
       response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
       response.setHeader("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,PATCH,OPTIONS");
       response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With");
@@ -37,7 +39,8 @@ public class UploadServlet extends HttpServlet {
    }
 
    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-      System.out.println("do post called");
+      JavaReflectTest.logMethod("com.comp3940.assignment.Servlets.UploadServlet", "doPost");
+//      System.out.println("do post called");
       try {
          response.setHeader("Access-Control-Allow-Origin", "*");
          response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
@@ -58,6 +61,7 @@ public class UploadServlet extends HttpServlet {
    }
 
    private void sendListing(HttpServletRequest request, HttpServletResponse response) throws IOException {
+      JavaReflectTest.logMethod("com.comp3940.assignment.Servlets.UploadServlet", "sendListing");
       File dir = new File(request.getServletContext().getRealPath("/uploads"));
       String[] dirFiles = dir.list();
       Arrays.sort(dirFiles);
@@ -71,6 +75,7 @@ public class UploadServlet extends HttpServlet {
    }
 
    private String addDirectoryToHtml(String html, String[] directoryList) {
+      JavaReflectTest.logAddDirectoryToHtml("com.comp3940.assignment.Servlets.UploadServlet", "addDirectoryToHtml");
       StringBuilder htmlDirFiles = new StringBuilder();
       for (String file : directoryList) {
          htmlDirFiles.append("<h2 class=\"text-lg font-semibold\">").append(file).append("</h2><br>\n");
